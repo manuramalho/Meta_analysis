@@ -1,0 +1,595 @@
+library (dplyr)
+mist <- read.csv("C:/Users/mds376/Desktop/Zoe Steven Manuscript Reviewer Wolbachia/data_mlst_ready_2.csv")
+mist2 <- read.csv("C:/Users/mds376/Desktop/Zoe Steven Manuscript Reviewer Wolbachia/Social_insects_only.csv")
+mist3 <- read.csv("C:/Users/mds376/Desktop/Zoe Steven Manuscript Reviewer Wolbachia/data_mlst_ready.csv")
+bee <- read.csv("C:/Users/mds376/Desktop/Zoe Steven Manuscript Reviewer Wolbachia/bee.csv")
+bee_wasp <- read.csv("C:/Users/mds376/Desktop/Zoe Steven Manuscript Reviewer Wolbachia/bee_wasp.csv")
+ant_termite <- read.csv("C:/Users/mds376/Desktop/Zoe Steven Manuscript Reviewer Wolbachia/ant_termite.csv")
+wasp <- read.csv("C:/Users/mds376/Desktop/Zoe Steven Manuscript Reviewer Wolbachia/wasp.csv")
+termite <- read.csv("C:/Users/mds376/Desktop/Zoe Steven Manuscript Reviewer Wolbachia/termite.csv")
+ant <- read.csv("C:/Users/mds376/Desktop/Zoe Steven Manuscript Reviewer Wolbachia/ant.csv")
+ant_new_old <- read.csv("C:/Users/mds376/Desktop/Zoe Steven Manuscript Reviewer Wolbachia/ant_new_old.csv")
+
+
+mist
+class(mist)
+
+mist2$Insect <-as.factor(mist2$Insect)
+mist2$Supergroup <-as.factor(mist2$Supergroup)
+mist$Geography <-as.factor(mist$Geography)
+mist2$Geography2 <-as.factor(mist2$Geography2)
+mist2$Host_Order <-as.factor(mist2$Host_Order)
+mist2$Host_Family <-as.factor(mist2$Host_Family)
+
+mist2$Social_Solitary <-as.factor(mist2$Social_Solitary)
+mist2$Host_species<-as.factor(mist2$Host_species)
+
+
+
+mist2$Host_genus<-as.factor(mist2$Host_genus)
+##contando 
+
+mist3$Host_species <-as.factor(mist3$Host_species)
+
+tab_species<-table(mist3$Host_species)
+tab_species
+
+tab_species_socialinsecta<-table(mist2$Host_species, mist2$Supergroup)
+tab_species_socialinsecta
+
+write.table(tab_species_socialinsecta, "tab_species_socialinsecta.txt" , sep = " ")
+####Primeiro filtra e remover supergroups H e O
+
+
+#Supergroup and Geography
+
+tab1<-table(mist2$Supergroup,mist2$Geography2 )
+tab1
+
+chisq.test(tab1)
+fisher.test(tab1)
+chisq.test(tab1, simulate.p.value = TRUE, B=5000)
+barplot(tab1, legend=T)
+?barplot
+
+
+###Supergroup e Ordem de inseto
+
+tab2<-table(mist2$Supergroup,mist2$Host_Order )
+tab2
+chisq.test(tab2, simulate.p.value = TRUE, B=5000)
+barplot(tab2, legend=T)
+
+
+
+##Geographya e ordem de inseto
+
+tab3<-table(mist2$Geography2,mist2$Host_Order )
+tab3
+
+chisq.test(tab3, simulate.p.value = TRUE, B=5000)
+barplot(tab3, legend=T)
+
+##Social e Supergroups
+
+##Tem alguma associaçao entre Social/Solitary e Supergroup?
+
+tab4<-table(mist2$Social_Solitary,mist2$Supergroup)
+tab4
+
+chisq.test(tab4, simulate.p.value = TRUE, B=5000)
+barplot(tab4, legend=T)
+
+
+#insects sociais e supergroup
+
+##Tem alguma associaçao entre Insecta e Supergroup?
+
+tab5<-table(mist2$Insect, mist2$Supergroup)
+tab5
+chisq.test(tab5, simulate.p.value = TRUE, B=5000)
+barplot(tab5, legend=T)
+
+
+#Supergroup and Geography
+
+tab1<-table(mist2$Geography2, mist2$Supergroup)
+tab1
+
+chisq.test(tab1, simulate.p.value = TRUE, B=5000)
+barplot(tab1, legend=T)
+
+
+
+?barplot
+
+# barchart with added parameters: https://www.datamentor.io/r-programming/bar-plot/
+
+
+barplot(tab5,
+        main = "Is there any association between the social insect group and the Wolbachia supergroup?",
+        xlab = "Observations",
+        ylab = "Supergroups",
+        col = c("yellow","green", "pink", "blue"),
+        horiz = TRUE
+)
+legend("topright",
+       c("ant","bee", "termite", "bee_wasp"),
+       fill = c("yellow","green", "pink", "blue")
+)
+
+
+#
+
+barplot(tab4,
+        main = "Is there any association between the solitary/social status and the Wolbachia supergroup?",
+        xlab = "Observations",
+        ylab = "Supergroups",
+        col = c("red","black"),
+        horiz = TRUE
+)
+legend("topright",
+       c("Solitary","Social"),
+       fill = c("red","black")
+)
+
+# Quer escolher nome das cores? confere aqui: https://www.r-graph-gallery.com/42-colors-names.html
+barplot(tab1,
+        main = "Is there any association between the Biogeography and the Wolbachia supergroup?",
+        xlab = "Observations",
+        ylab = "Supergroups",
+        col = c("cyan","deeppink", "purple", "orange", "darkgreen","darkred", "grey"),
+        horiz = TRUE
+)
+legend("topright",
+       c("Asia","Central America", "Africa", "North America", "South America", "Europe", "Oceania"),
+       fill = c("cyan","deeppink", "purple", "orange", "darkgreen","darkred", "grey")
+)
+
+
+
+###Quais as ordens de insetos e geografia dos dados MLST encontrados no presente estudo?
+##Isso da uma ideia de onde devemos explorar mais!
+
+
+mist2$Host_Order <-as.factor(mist2$Host_Order)
+tab3<-table(mist2$Geography2,mist2$Host_Order )
+tab3
+
+tab6<-table(mist2$Geography2,mist2$Host_Family )
+tab6
+
+chisq.test(tab6, simulate.p.value = TRUE, B=5000)
+barplot(tab6, legend=T)
+
+
+write.table(tab6, "Host_Family_Biogeographya.txt", sep = " ")
+
+
+barplot(tab6,
+        main = "Insect Host Family with Wolbachia (MLST) and Biogeography",
+        xlab = "Family",
+        ylab = "Observations",
+        names.arg = c("Agaonidae", "Andrenidae", "Aphelinidae", "Apidae", "Bethylidae", "Braconidae", "Colletidae", "Crabronidae", "Cynipidae", "Diapriidae", "Encyrtidae","Eurytomidae", "Figitidae", "Formicidae", "Halictidae", "Ichneumonidae", "Megachilidae", "Melittida","Platygastridae", "Pompilidae", "Pteromalidae", "Rhinotermitidae", "Termitidae", "Torymidae", "Trichogrammatidae", "Vespidae"),
+        col = c("cyan","deeppink", "purple", "orange", "darkgreen","darkred", "grey"),
+)
+legend("topright",
+       c("Asia","Central America", "Africa", "North America", "South America", "Europe", "Oceania"),
+       fill = c("cyan","deeppink", "purple", "orange", "darkgreen","darkred", "grey")
+)
+
+
+tab7<-table(mist2$Insect,mist2$Host_Family)
+tab7
+
+tab7<-table(mist2$Insect)
+tab7
+
+tab8<-table(mist2$Insect, mist2$Social_Solitary, mist2$Supergroup)
+tab8
+
+write.table(tab8, "tab8.txt", sep = " ")
+
+barplot(tab8, legend=T)
+
+#######
+##Bee## os dados principais de bee devem mostrar que so tem amostras da AN e EU. 
+#######
+
+bee$Supergroup <-as.factor(bee$Supergroup)
+bee$Geography2 <-as.factor(bee$Geography2)
+
+##tem alguma associacao entre supergroup e geografia? RESPOSTA NAO! PQ NAO TEMOS UMA BOA AMOSTRAGEM DE DISTRIBUICAO GEOGRAFICA. 
+tabbee<-table(bee$Geography2,bee$Supergroup)
+tabbee
+chisq.test(tabbee, simulate.p.value = TRUE, B=5000)
+barplot(tabbee, legend=T)
+##so temos resultado de abelha da AN  Europa! e os demais continentes? E o resultado estatistico nao mostra nao haver associacao 
+#data:  tabbee X-squared = 3.8144, df = NA, p-value = 0.2116
+
+bee$Social_Solitary <-as.factor(bee$Social_Solitary)
+
+
+##Temos alguma associancao entre supergroup e o statis de social e solitary? RESPOSTA NAO. data: tabbee2
+#X-squared = 0.89634, df = NA, p-value = 0.7203
+tabbee2<-table(bee$Supergroup,bee$Social_Solitary)
+tabbee2
+
+chisq.test(tabbee2, simulate.p.value = TRUE, B=5000)
+barplot(tabbee2, legend=T)
+
+####Tem alguma associacao entre o status social/solitary e biogeography? #SIM, data:  tabbee3 X-squared = 8.6034, df = NA, p-value = 0.011
+tabbee3<-table(bee$Geography2,bee$Social_Solitary)
+tabbee3
+
+chisq.test(tabbee3, simulate.p.value = TRUE, B=5000)
+barplot(tabbee3, legend=T)
+
+
+######
+#bee_wasp#
+######
+
+bee_wasp$Supergroup <-as.factor(bee_wasp$Supergroup)
+bee_wasp$Geography2 <-as.factor(bee_wasp$Geography2)
+
+##tem alguma associacao entre supergroup e geografia? RESPOSTA SIM! X-squared = 53.554, df = NA, p-value = 0.008998, NAO TEMOS A GEOGRAFIA AFRICA REPRESENTADA AQUI
+tabbee_wasp<-table(bee_wasp$Supergroup,bee_wasp$Geography2)
+tabbee_wasp
+chisq.test(tabbee_wasp, simulate.p.value = TRUE, B=5000)
+barplot(tabbee_wasp, legend=T)
+
+bee_wasp$Social_Solitary <-as.factor(bee_wasp$Social_Solitary)
+
+
+##Temos alguma associancao entre supergroup e o statis de social e solitary? RESPOSTA SIM! tEMOS MUITO MAIS AMOSTRAS SOLITARY, E ELAS TEM a E b!
+#data:  tabbee_wasp2 X-squared = 24.304, df = NA, p-value = 2e-04
+
+tabbee_wasp2<-table(bee_wasp$Supergroup,bee_wasp$Social_Solitary)
+tabbee_wasp2
+
+chisq.test(tabbee_wasp2, simulate.p.value = TRUE, B=5000)
+barplot(tabbee_wasp2, legend=T)
+
+####Tem alguma associacao entre o status social/solitary e biogeography? #SIM, data:  tabbee_wasp3 X-squared = 53.566, df = NA, p-value = 2e-04, TEMOS MUITO SOLITARY NA ASIA, AN E EUROPA. 
+tabbee_wasp3<-table(bee_wasp$Geography2,bee_wasp$Social_Solitary)
+tabbee_wasp3
+
+chisq.test(tabbee_wasp3, simulate.p.value = TRUE, B=5000)
+barplot(tabbee_wasp3, legend=T)
+
+###########################
+#bee__wasp## Juntei esses dois pois eles tem a representacao de social e solitary!
+######################################
+
+bee_wasp$Supergroup <-as.factor(bee_wasp$Supergroup)
+bee_wasp$Geography2 <-as.factor(bee_wasp$Geography2)
+
+##tem alguma associacao entre supergroup e geografia? RESPOSTA Sim Pearson's Chi-squared test with simulated p-value (based on 5000 replicates)
+#data:  tabbee_wasp
+#X-squared = 99.062, df = NA, p-value = 0.0003999
+
+tabbee_wasp<-table(bee_wasp$Supergroup,bee_wasp$Geography2)
+tabbee_wasp
+chisq.test(tabbee_wasp, simulate.p.value = TRUE, B=5000)
+barplot(tabbee_wasp, legend=T)
+
+bee_wasp$Social_Solitary <-as.factor(bee_wasp$Social_Solitary)
+
+##Temos alguma associancao entre supergroup e o statis de social e solitary? RESPOSTA SIM! Pearson's Chi-squared test with simulated p-value (based on 5000 replicates)
+
+#data:  tabbee_wasp2
+#X-squared = 7.8261, df = NA, p-value = 0.02899 TEMOS MUITO MAIS SOLITARY!
+
+tabbee_wasp2<-table(bee_wasp$Supergroup,bee_wasp$Social_Solitary)
+tabbee_wasp2
+
+chisq.test(tabbee_wasp2, simulate.p.value = TRUE, B=5000)
+barplot(tabbee_wasp2, legend=T)
+
+####Tem alguma associacao entre o status social/solitary e biogeography? #SIM, data:  data:  tabbee_wasp3
+#X-squared = 54.152, df = NA, p-value = 2e-04, temos muito mais solitary amostrado! principalmente na europa. 
+
+tabbee_wasp3<-table(bee_wasp$Geography2,bee_wasp$Social_Solitary)
+tabbee_wasp3
+
+#or 
+
+tabbee_wasp3<-table(bee_wasp$Social_Solitary,bee_wasp$Geography2)
+tabbee_wasp3
+
+chisq.test(tabbee_wasp3, simulate.p.value = TRUE, B=5000)
+barplot(tabbee_wasp3, legend=T)
+
+
+#############
+#Ant_Termite- juntei pq os dois sao os verdadeiramente sociais
+#############
+
+ant_termite$Supergroup <-as.factor(ant_termite$Supergroup)
+ant_termite$Geography2 <-as.factor(ant_termite$Geography2)
+
+##tem alguma associacao entre supergroup e geografia? RESPOSTA NAO! pQ TEMOS O a distrubuido em todo lugar! Mas temos MUITO MUITO MAIS a do que B! PQ É O MAIS COMUM PARA FORMIGAS E O f É O MAIS COMUM PARA TERMITE!MAS SO TEMOS AMOSTRAGEM NA ASIA DISSO, COM POUCOS REPRESENTANTES EM OUTROS LUGARES!
+#RESUTADO: data:  tabant_termite X-squared = 16.179, df = NA, p-value = 0.1018
+
+tabant_termite<-table(ant_termite$Supergroup,ant_termite$Geography2)
+tabant_termite
+chisq.test(tabant_termite, simulate.p.value = TRUE, B=5000)
+barplot(tabant_termite, legend=T)
+
+bee_wasp$Social_Solitary <-as.factor(bee_wasp$Social_Solitary)
+
+##Temos alguma associancao entre supergroup e o statis de social e solitary? nao faz SENTIDO FAZER ESSE TESTE POIS SAO TODOS SOCIAIS!!
+
+tabant_termite2<-table(ant_termite$Supergroup,ant_termite$Social_Solitary)
+tabant_termite2
+
+
+####Tem alguma associacao entre o status social/solitary e biogeography? ###Temos alguma associancao entre supergroup e o statis de social e solitary? nao faz SENTIDO FAZER ESSE TESTE POIS SAO TODOS SOCIAIS!!
+
+tabant_termite3<-table(ant_termite$Geography2,ant_termite$Social_Solitary)
+tabant_termite3
+
+#or 
+
+tabbee_wasp3<-table(bee_wasp$Social_Solitary,bee_wasp$Geography2)
+tabbee_wasp3
+
+chisq.test(tabant_termite3, simulate.p.value = TRUE, B=5000)
+barplot(tabant_termite3, legend=T)
+
+
+#######
+#wasp
+#########
+
+wasp$Supergroup <-as.factor(wasp$Supergroup)
+wasp$Geography2 <-as.factor(wasp$Geography2)
+
+##tem alguma associacao entre supergroup e geografia? RESPOSTA sim!Mas de novo, pq maior parte dos dados vem Asia, Europa e AN. Outras localidades tem poucos representantes (America Central tem  n = 1, Oceania tem n = 1, e America do Sul tem N = 4)
+tabwasp<-table(wasp$Geography2,wasp$Supergroup)
+tabwasp
+chisq.test(tabwasp, simulate.p.value = TRUE, B=5000)
+barplot(tabwasp, legend=T)
+##so temos resultado de abelha da AN  Europa! e os demais continentes? E o resultado estatistico nao mostra nao haver associacao 
+#data:  tabbee X-squared = 3.8144, df = NA, p-value = 0.2116
+
+wasp$Social_Solitary <-as.factor(wasp$Social_Solitary)
+
+
+##Temos alguma associancao entre supergroup e o statis de social e solitary? RESPOSTA NAO. data: tabbee2
+#X-squared = 0.89634, df = NA, p-value = 0.7203
+tabwasp2<-table(wasp$Supergroup,wasp$Social_Solitary)
+tabwasp2
+
+chisq.test(tabwasp2, simulate.p.value = TRUE, B=5000)
+barplot(tabbee2, legend=T)
+
+####Tem alguma associacao entre o status social/solitary e biogeography? #SIM, data:  tabbee3 X-squared = 8.6034, df = NA, p-value = 0.011
+tabwasp3<-table(wasp$Geography2,wasp$Social_Solitary)
+tabwasp3
+
+chisq.test(tabwasp3, simulate.p.value = TRUE, B=5000)
+barplot(tabbee3, legend=T)
+
+
+#######
+#termite
+#########
+
+termite$Supergroup <-as.factor(termite$Supergroup)
+termite$Geography2 <-as.factor(termite$Geography2)
+
+##tem alguma associacao entre supergroup e geografia? Naoishi? rs
+tabtermite<-table(termite$Geography2,termite$Supergroup)
+tabtermite
+chisq.test(tabtermite, simulate.p.value = TRUE, B=5000)
+barplot(tabtermite, legend=T)
+
+#
+#######
+#ant
+#########
+
+ant$Supergroup <-as.factor(ant$Supergroup)
+ant$Geography2 <-as.factor(ant$Geography2)
+
+##tem alguma associacao entre supergroup e geografia? Naoishi? rs
+tabant<-table(ant$Geography2,ant$Supergroup)
+tabant
+
+chisq.test(tabant, simulate.p.value = TRUE, B=5000)
+barplot(tabant, legend=T)
+
+
+tabantgeo<-table(ant$Geography2)
+
+tabantSupergroup<-table(ant$Supergroup)
+
+
+
+barplot(tabant,
+        main = "Is there any association between the Biogeography and the Wolbachia supergroup in ants?",
+        xlab = "Observations",
+        ylab = "Supergroups",
+        col = c("cyan","deeppink", "purple", "orange", "darkgreen", "grey"),
+        horiz = TRUE
+)
+legend("topright",
+       c("Asia","Central America", "Africa", "North America", "South America", "Oceania"),
+       fill = c("cyan","deeppink", "purple", "orange", "darkgreen", "grey")
+)
+
+##quantas especies de mist2$Host_genus
+
+#ants
+
+ant$Host_genus<-as.factor(ant$Host_genus)
+bee$Host_genus<-as.factor(bee$Host_genus)
+wasp$Host_genus<-as.factor(wasp$Host_genus)
+termite$Host_genus<-as.factor(termite$Host_genus)
+##contando 
+
+tabant_genus<-table(ant$Host_genus)
+tabant_genus
+dim(tabant_genus)
+
+pie(tabant_genus)
+
+barplot(tabant_genus, legend=T)
+
+#bee
+tabee_genus<-table(bee$Host_genus)
+tabee_genus
+dim(tabee_genus)
+
+#wasp
+tabwasp_genus<-table(wasp$Host_genus)
+tabwasp_genus
+dim(tabwasp_genus)
+
+#termite
+tabtermite_genus<-table(termite$Host_genus)
+tabtermite_genus
+dim(tabtermite_genus)
+
+########
+#new and Old world
+###############
+
+ant_new_old$New_old <-as.factor(ant_new_old$New_old)
+ant_new_old$Supergroup <-as.factor(ant_new_old$Supergroup)
+
+
+##tem alguma associacao entre supergroup e NEW AND OLD WORD? RESPOSTA NAO X-squared = 6.0074, df = NA, p-value = 0.05999
+tabnew_old<-table(ant_new_old$Supergroup,ant_new_old$New_old)
+tabnew_old
+chisq.test(tabnew_old, simulate.p.value = TRUE, B=5000)
+barplot(tabnew_old, legend=T)
+
+#################################
+####outros insetos incluidos#####
+##################################
+
+mist$Social_Solitary <-as.factor(mist$Social_Solitary)
+mist$Supergroup <-as.factor(mist$Supergroup)
+mist$Geography2 <-as.factor(mist$Geography2)
+mist$Host_Order <-as.factor(mist$Host_Order)
+mist$Insect <-as.factor(mist$Insect)
+
+##Tem alguma associaçao entre Insecta e Supergroup?
+beyond<-table(mist$Insect, mist$Supergroup)
+beyond
+chisq.test(beyond, simulate.p.value = TRUE, B=5000)
+barplot(beyond, legend=T)
+
+##
+beyond2<-table(mist$Host_Order, mist$Supergroup)
+beyond2
+chisq.test(beyond2, simulate.p.value = TRUE, B=5000)
+barplot(beyond2, legend=T)
+
+insetos_ordem<-table(mist$Host_Order)
+
+barplot(beyond2,
+        main = "Is there any association between the Insect Orders and the Wolbachia supergroup in ants?",
+        xlab = "Observations",
+        ylab = "Supergroups",
+        col = c("brown","aquamarine", "darkorchid", "darkolivegreen", "coral1", "darkgoldenrod1"),
+        horiz = TRUE
+)
+legend("topright",
+       c("Blattodea","Coleoptera", "Diptera", "Hemiptera", "Hymenoptera", "Lepidoptera"),
+       fill = c("brown","aquamarine", "darkorchid", "darkolivegreen", "coral1", "darkgoldenrod1")
+)
+
+
+#Supergroup and Geography
+
+beyond3<-table(mist$Geography2, mist$Supergroup)
+beyond3
+
+chisq.test(beyond3, simulate.p.value = TRUE, B=5000)
+barplot(beyond3, legend=T)
+
+barplot(beyond3,
+        main = "Is there any association between the Biogeography of Insect Orders and the Wolbachia supergroup?",
+        xlab = "Observations",
+        ylab = "Supergroups",
+        col = c("cyan","deeppink", "purple", "orange", "darkgreen","darkred", "grey"),
+        horiz = TRUE
+)
+legend("topright",
+       c("Asia","Central America", "Africa", "North America", "South America", "Europe", "Oceania"),
+       fill = c("cyan","deeppink", "purple", "orange", "darkgreen","darkred", "grey")
+)
+
+#Supergroup e social solitary ## Mas essa analise nao faz sentido
+beyond4<-table(mist$Social_Solitary, mist$Supergroup)
+beyond4
+
+chisq.test(beyond4, simulate.p.value = TRUE, B=5000)
+barplot(beyond4, legend=T)
+
+
+#####
+#Só solitary
+####
+
+mist_solitary <- read.csv("C:/Users/mds376/Desktop/Zoe Steven Manuscript Reviewer Wolbachia/Solitary.csv")
+
+mist_solitary$Supergroup <-as.factor(mist_solitary$Supergroup)
+mist_solitary$Geography2 <-as.factor(mist_solitary$Geography2)
+mist_solitary$Host_Order <-as.factor(mist_solitary$Host_Order)
+mist_solitary$Insect <-as.factor(mist_solitary$Insect)
+
+##Tem alguma associacao entre inseto e supergroup?
+
+beyond<-table(mist_solitary$Insect, mist_solitary$Supergroup)
+beyond
+chisq.test(beyond, simulate.p.value = TRUE, B=5000)
+barplot(beyond, legend=T)
+
+
+##Tem alguma associacao entre inseto ordem e supergroup?
+
+beyond2<-table(mist_solitary$Host_Order, mist_solitary$Supergroup)
+beyond2
+chisq.test(beyond2, simulate.p.value = TRUE, B=5000)
+barplot(beyond2, legend=T)
+
+insetos_ordem<-table(mist_solitary$Host_Order)
+
+
+barplot(beyond2,
+        main = "Is there any association between the Insect Orders and the Wolbachia supergroup in ants?",
+        xlab = "Observations",
+        ylab = "Supergroups",
+        col = c("aquamarine", "darkorchid", "darkolivegreen", "coral1", "darkgoldenrod1"),
+        horiz = TRUE
+)
+legend("topright",
+       c("Coleoptera", "Diptera", "Hemiptera", "Hymenoptera", "Lepidoptera"),
+       fill = c("aquamarine", "darkorchid", "darkolivegreen", "coral1", "darkgoldenrod1")
+)
+
+
+#Supergroup and Geography
+
+beyond3<-table(mist_solitary$Geography2, mist_solitary$Supergroup)
+beyond3
+
+chisq.test(beyond3, simulate.p.value = TRUE, B=5000)
+barplot(beyond3, legend=T)
+
+barplot(beyond3,
+        main = "Is there any association between the Biogeography of Insect Orders and the Wolbachia supergroup?",
+        xlab = "Observations",
+        ylab = "Supergroups",
+        col = c("cyan","deeppink", "purple", "orange", "darkgreen","darkred", "grey"),
+        horiz = TRUE
+)
+legend("topright",
+       c("Asia","Central America", "Africa", "North America", "South America", "Europe", "Oceania"),
+       fill = c("cyan","deeppink", "purple", "orange", "darkgreen","darkred", "grey")
+)
