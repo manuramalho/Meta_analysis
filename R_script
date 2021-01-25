@@ -46,14 +46,11 @@ write.table(tab_species_socialinsecta, "tab_species_socialinsecta.txt" , sep = "
 tab1<-table(mist2$Supergroup,mist2$Geography2 )
 tab1
 
-chisq.test(tab1)
-fisher.test(tab1)
 chisq.test(tab1, simulate.p.value = TRUE, B=5000)
 barplot(tab1, legend=T)
-?barplot
 
 
-###Supergroup e Ordem de inseto
+###Supergroup and insect order
 
 tab2<-table(mist2$Supergroup,mist2$Host_Order )
 tab2
@@ -61,8 +58,7 @@ chisq.test(tab2, simulate.p.value = TRUE, B=5000)
 barplot(tab2, legend=T)
 
 
-
-##Geographya e ordem de inseto
+##Insect order and geography
 
 tab3<-table(mist2$Geography2,mist2$Host_Order )
 tab3
@@ -70,9 +66,8 @@ tab3
 chisq.test(tab3, simulate.p.value = TRUE, B=5000)
 barplot(tab3, legend=T)
 
-##Social e Supergroups
-
-##Tem alguma associaçao entre Social/Solitary e Supergroup?
+##Social or solitary status and Wolbachia Supergroups
+##Is there an association between Social / Solitary status and Wolbachia Supergroup?
 
 tab4<-table(mist2$Social_Solitary,mist2$Supergroup)
 tab4
@@ -81,9 +76,9 @@ chisq.test(tab4, simulate.p.value = TRUE, B=5000)
 barplot(tab4, legend=T)
 
 
-#insects sociais e supergroup
+#Social insects and Wolbachia supergroup
 
-##Tem alguma associaçao entre Insecta e Supergroup?
+##Is there any association between Insecta (social only) and Wolbachia Supergroup?
 
 tab5<-table(mist2$Insect, mist2$Supergroup)
 tab5
@@ -91,17 +86,13 @@ chisq.test(tab5, simulate.p.value = TRUE, B=5000)
 barplot(tab5, legend=T)
 
 
-#Supergroup and Geography
+#Wolbachia Supergroup and Geography
 
 tab1<-table(mist2$Geography2, mist2$Supergroup)
 tab1
 
 chisq.test(tab1, simulate.p.value = TRUE, B=5000)
 barplot(tab1, legend=T)
-
-
-
-?barplot
 
 # barchart with added parameters: https://www.datamentor.io/r-programming/bar-plot/
 
@@ -133,7 +124,8 @@ legend("topright",
        fill = c("red","black")
 )
 
-# Quer escolher nome das cores? confere aqui: https://www.r-graph-gallery.com/42-colors-names.html
+# Want to choose other colors? See the color names here: https://www.r-graph-gallery.com/42-colors-names.html
+
 barplot(tab1,
         main = "Is there any association between the Biogeography and the Wolbachia supergroup?",
         xlab = "Observations",
@@ -148,8 +140,8 @@ legend("topright",
 
 
 
-###Quais as ordens de insetos e geografia dos dados MLST encontrados no presente estudo?
-##Isso da uma ideia de onde devemos explorar mais!
+###What are the insect orders and geography of the MLST data found in the present study?
+##This gives an idea of where we should explore further in future studies
 
 
 mist2$Host_Order <-as.factor(mist2$Host_Order)
@@ -193,22 +185,21 @@ write.table(tab8, "tab8.txt", sep = " ")
 barplot(tab8, legend=T)
 
 #######
-##Bee## os dados principais de bee devem mostrar que so tem amostras da AN e EU. 
+##Bee## 
 #######
 
 bee$Supergroup <-as.factor(bee$Supergroup)
 bee$Geography2 <-as.factor(bee$Geography2)
 
-##tem alguma associacao entre supergroup e geografia? RESPOSTA NAO! PQ NAO TEMOS UMA BOA AMOSTRAGEM DE DISTRIBUICAO GEOGRAFICA. 
+##Existe  alguma associacao entre Wolbachia supergroup e geografia? RESPOSTA NAO! PQ NAO TEMOS UMA BOA AMOSTRAGEM DE DISTRIBUICAO GEOGRAFICA. 
 tabbee<-table(bee$Geography2,bee$Supergroup)
 tabbee
 chisq.test(tabbee, simulate.p.value = TRUE, B=5000)
 barplot(tabbee, legend=T)
-##so temos resultado de abelha da AN  Europa! e os demais continentes? E o resultado estatistico nao mostra nao haver associacao 
-#data:  tabbee X-squared = 3.8144, df = NA, p-value = 0.2116
+
+##we only have bee results from AN and Europe!
 
 bee$Social_Solitary <-as.factor(bee$Social_Solitary)
-
 
 ##Temos alguma associancao entre supergroup e o statis de social e solitary? RESPOSTA NAO. data: tabbee2
 #X-squared = 0.89634, df = NA, p-value = 0.7203
@@ -233,7 +224,7 @@ barplot(tabbee3, legend=T)
 bee_wasp$Supergroup <-as.factor(bee_wasp$Supergroup)
 bee_wasp$Geography2 <-as.factor(bee_wasp$Geography2)
 
-##tem alguma associacao entre supergroup e geografia? RESPOSTA SIM! X-squared = 53.554, df = NA, p-value = 0.008998, NAO TEMOS A GEOGRAFIA AFRICA REPRESENTADA AQUI
+##tem alguma associacao entre supergroup e geografia? RESPOSTA SIM! 
 tabbee_wasp<-table(bee_wasp$Supergroup,bee_wasp$Geography2)
 tabbee_wasp
 chisq.test(tabbee_wasp, simulate.p.value = TRUE, B=5000)
